@@ -1,4 +1,5 @@
-name: Configure server
-hosts: ubuntu
-roles:
-  - setup
+---
+- name: "Configure server"
+  hosts: ubuntu
+  roles:
+    - setup
