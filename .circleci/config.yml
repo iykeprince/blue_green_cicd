@@ -17,7 +17,24 @@ jobs:
             --template-file template.yml \
             --stack-name bluegreen-stack-${CIRCLE_WORKFLOW_ID:0:5}
 
+  configure_infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["c4:43:f4:86:59:50:90:f1:d6:be:8b:d3:99:c6:51:be"]
+      - run:
+          name: Install Ansible
+          command: |
+            apk add --update ansible
+      - run:
+          name: Run playbook and configure server
+          command: |
+            ansible-playbook -i inventory.txt main.yml
+
 workflows:
   app-workflow:
     jobs:
-      - create_infrastructure
+      # - create_infrastructure
+      - configure_infrastructure
